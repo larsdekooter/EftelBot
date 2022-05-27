@@ -70,4 +70,6 @@ client.on('interactionCreate', async (interaction) => {
   }, 43200000)
 
 
-client.login(token)
+// client.login(token)
+console.log(process.argv.slice(2))
+process.argv.slice(2)[0] === 'n' ? null : client.login(token)
