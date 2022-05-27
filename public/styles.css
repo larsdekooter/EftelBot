@@ -1,35 +1,35 @@
 .discord {
-    width: 3vh;
-    height: 3vh;
+    width: 27px;
+    height: 27px;
     position: absolute;
-    left: .6vw;
-    top: .5vh;
+    left: 10px;
+    top: 5px;
 }
 
 .socials {
     background-color: rgba(192, 192, 192, .7);
     position: absolute;
     top: 95vh;
-    width: 10vw;
-    height: 4vh;
+    width: 168px;
+    height: 36px;
     border-radius: 10px;
 }
 
 .insta {
-    width: 3vh;
-    height: 3vh;
+    width: 27px;
+    height: 27px;
     position: absolute;
-    left: 4.2vw;
-    top: .5vh;
+    left: 70px;
+    top: 5px;
 }
 
 
 .tiktok {
-    width: 3vh;
-    height: 3vh;
+    width: 27px;
+    height: 27px;
     position: absolute;
-    left: 8.0vw;
-    top: .5vh;
+    left: 133px;
+    top: 5px;
 }
 
 .title {
@@ -47,8 +47,8 @@
 
 
 .menu {
-    width: 102vw;
-    height: 7vh;
+    width: 1714px;
+    height: 63px;
     background-color:rgba(0, 0, 0, .4);
     margin-left: -1%;
     margin-top: -1%;
@@ -65,8 +65,8 @@ body {
     outline: none;
     color: white;
     position: absolute;
-    top: 2vh;
-    left: 30vw;
+    top: 18px;
+    left: 510px;
     font-family: 'Lato';
     cursor: pointer;
 }
@@ -76,9 +76,11 @@ body {
     background: none;
     outline: none;
     position: absolute;
-    top: .2vh;
-    left: 1vw;
+    top: 1px;
+    left: 10px;
     cursor: pointer;
+    width: 50px;
+    height: 50px;
 }
 
 .url {
@@ -89,8 +91,8 @@ body {
 
 .homepageText {
     position: absolute;
-    left: 5vw;
-    top: .4vh;
+    left: 70px;
+    top: 3px;
     font-family: 'Lato';
 
 }
@@ -102,8 +104,8 @@ body {
 .serverinfo {
     cursor: pointer;
     position: absolute;
-    left: 40vw;
-    top: 2vh;
+    left: 680px;
+    top: 18px;
     background: none;
     border: none;
     outline: none;
@@ -113,13 +115,14 @@ body {
 
 .releases {
     position: absolute;
-    left: 50vw;
-    top: 2vh;
+    left: 850px;
+    top: 18px;
     background: none;
     outline: none;
     border: none;
     color: white;
     font-family: Lato;
+    cursor: pointer;
 }
 
 .description {
@@ -143,10 +146,10 @@ body {
 }
 
 .main-post {
-    height: 35vh;
+    height: 317px;
     background-color: black;
-    margin-top: 14vh;
-    width: 20vw;
+    margin-top: 130px;
+    width: 336px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);

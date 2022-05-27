@@ -13,14 +13,14 @@ body {
 
 .releasestitle {
     position: absolute;
-    top: 5vh;
+    top: 45.350px;
     font-size: 5vh;
 }
 
 .releases {
     color: white;
     position: absolute;
-    top: 30%;
+    top: 272.094px;
     font-size: 1.2vw;
     font-family: Ubuntu;
 }

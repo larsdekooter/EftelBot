@@ -19,7 +19,7 @@ body {
     font-family: Ubuntu;
     text-align: center;
     position: absolute;
-    top: 25vh;
+    top: 210px;
 }
 
 .button {
@@ -42,32 +42,31 @@ body {
 }
 
 .roles {
-    top: 32vh;
-    left: 28vw;
-
+    top: 290.24px;
+    left: 470.4px;
 }
 
 .emojis {
-    top: 32vh;
-    left: 37vw;
+    top: 290.240px;
+    left: 621.600px;
     font-family: sans-serif;
 }
 
 
 
 .owner {
-    top: 32vh;
-    left: 46vw;
+    top: 290.240px;
+    left: 772.800px;
 }
 
 .moderators {
-    top: 32vh;
-    left: 55vw;
+    top: 290.240px;
+    left: 924px;
 }
 
 .boost-tier {
-    top: 32vh;
-    left: 64vw;
+    top: 290.240px;
+    left: 1075.200px;
 }
 
 .info-div {
