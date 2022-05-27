@@ -133,7 +133,11 @@ module.exports = new Command({
         if(subcommandGroup === 'walibi') {
             if(subcommand === 'guess-attraction') {
                 const attractions = [
-                    { img: 'https://cdn.discordapp.com/attachments/950681875733708820/979677026174763018/unknown.png', name: 'test' }
+                    { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS48bl60y5XG3t1p4Ylwe0oaAablKAWgesjNqgvKf22&s', name: 'Goliath' },
+                    { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyTdWbfO3JEPfQiAPaxGiF_F0xVXB53RCi-BNQPhgZWw&s', name: 'Lost Gravity' },
+                    { img: 'https://www.looopings.nl/img/foto/061216verf1.jpg', name: 'Condor' },
+                    { img: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Ch%C3%A2teau_magique_de_Merlin.JPG', name: 'Merlin\'s Magic Castle' },
+                    { name: 'SkyDiver', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5IRkQvN3hkYobRNMfVz_bzZp5pETEZzReCixqacVx&usqp=CAE&s' }
                 ].map(obj => { return { img: new MessageAttachment(obj.img, 'eftelingimage.png'), name: obj.name } });
 
                 const attr = attractions[Math.floor(Math.random() * attractions.length)];
