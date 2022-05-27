@@ -1,0 +1,164 @@
+.discord {
+    width: 3vh;
+    height: 3vh;
+    position: absolute;
+    left: .6vw;
+    top: .5vh;
+}
+
+.socials {
+    background-color: rgba(192, 192, 192, .7);
+    position: absolute;
+    top: 95vh;
+    width: 10vw;
+    height: 4vh;
+    border-radius: 10px;
+}
+
+.insta {
+    width: 3vh;
+    height: 3vh;
+    position: absolute;
+    left: 4.2vw;
+    top: .5vh;
+}
+
+
+.tiktok {
+    width: 3vh;
+    height: 3vh;
+    position: absolute;
+    left: 8.0vw;
+    top: .5vh;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.Verner {
+    font-family: "Lobster";
+    font-size: 5vw;
+    margin-top: 0vh;
+    /* position: absolute; */
+    color: white;
+}
+
+
+.menu {
+    width: 102vw;
+    height: 7vh;
+    background-color:rgba(0, 0, 0, .4);
+    margin-left: -1%;
+    margin-top: -1%;
+    border-radius: 10px;
+}
+
+body {
+    overflow: hidden;
+}
+
+.commands {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    position: absolute;
+    top: 2vh;
+    left: 30vw;
+    font-family: 'Lato';
+    cursor: pointer;
+}
+
+.logo-tohomepage {
+    border: none;
+    background: none;
+    outline: none;
+    position: absolute;
+    top: .2vh;
+    left: 1vw;
+    cursor: pointer;
+}
+
+.url {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.homepageText {
+    position: absolute;
+    left: 5vw;
+    top: .4vh;
+    font-family: 'Lato';
+
+}
+
+.logoPointer {
+    cursor: pointer;
+}
+
+.serverinfo {
+    cursor: pointer;
+    position: absolute;
+    left: 40vw;
+    top: 2vh;
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    font-family: 'Lato';
+}
+
+.releases {
+    position: absolute;
+    left: 50vw;
+    top: 2vh;
+    background: none;
+    outline: none;
+    border: none;
+    color: white;
+    font-family: Lato;
+}
+
+.description {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-family: Ubuntu;
+    font-weight: 550;
+    height: max-content;
+    color: white;
+}
+
+.fancy {
+    font-family: Lobster;
+}
+
+.jumpback {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main-post {
+    height: 35vh;
+    background-color: black;
+    margin-top: 14vh;
+    width: 20vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(192, 192, 192, .6);
+    border-radius: 10px;
+    background-image: url('./EftelBotLogo.png');
+    background-size: 20vw 35vh;
+    background-repeat: no-repeat;
+}
+
+body {
+    background-image: url('https://content.presspage.com/uploads/1877/500_efteling-aquanura-1-919210.jpg?10000');
+    background-repeat: no-repeat;
+    background-size: 100vw 100vh;
+}
