@@ -1,27 +1,26 @@
 console.clear()
-
+// Import everything we use
 const { Client, Intents, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10')
 const { FLAGS } = Intents;
 const fs = require('node:fs');
+require('dotenv').config();
+// Setup our website
 const express = require('express');
-require('dotenv').config()
-const token = process.env['token'];
-
 const app = express();
-app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }))
-app.get('/botcommands.html', (req, res) => res.sendFile('botcommands.html', { root: '.' }))
-app.get('/releases.html', (req, res) => res.sendFile('releases.html', { root: '.' }))
+app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
+app.get('/botcommands.html', (req, res) => res.sendFile('botcommands.html', { root: '.' }));
+app.get('/releases.html', (req, res) => res.sendFile('releases.html', { root: '.' }));
 app.get('/serverinfo.html', (req, res) => res.sendFile('serverinfo.html', { root: '.' }))
 app.get('/themeparks', async (req, res) => {
- const rest = new REST({ version: '9' }).setToken(token);
-rest.get(Routes.guild('972418027066884116'), {
-  // query: makeURLSearchParams({ with_counts: true })
-}).then(guild => { res.status(200).send(JSON.parse(JSON.stringify(guild))); })
-})
-app.use(express.static('public'))
+  const rest = new REST({ version: '9' }).setToken(token);
+  rest.get(Routes.guild('972418027066884116')).then(guild => { res.status(200).send(JSON.parse(JSON.stringify(guild))); })
+});
+app.use(express.static('public'));
 app.listen(8080)
+
+const token = process.env['token'];
 
 const client = new Client({
     intents: [

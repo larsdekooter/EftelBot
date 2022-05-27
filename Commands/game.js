@@ -24,6 +24,19 @@ module.exports = new Command({
                         .setDescriptionLocalization('nl', 'Raad welke attractie in de afbeelding staat')
                 )
         )
+        .addSubcommandGroup(group => {
+            return group
+                .setName('walibi')
+                .setDescription('Play games about Walibi')
+                .setDescriptionLocalization('nl', 'Speel spellen over Walibi')
+                .addSubcommand(sub => {
+                    return sub
+                        .setName('guess-attraction')
+                        .setDescription('Guess what attraction is shown in the image')
+                        .setNameLocalization('nl', 'raad-attractie')
+                        .setDescriptionLocalization('nl', 'Raad welke attractue is afgebeeld in de afbeelding')
+                })
+        })
       ,
     async execute(interaction, client) {
         const subcommand = interaction.options.getSubcommand();
@@ -49,7 +62,7 @@ module.exports = new Command({
                 })
 
 
-                        console.log(images.map(img => img.att))
+                        // console.log(images.map(img => img.att))
                 const attractionObject = images[Math.floor(Math.random() * images.length)];
 
                 const message = await interaction.reply({ 
@@ -81,12 +94,17 @@ module.exports = new Command({
                     const attractionInput = new TextInputComponent()
                         .setCustomId('attractionInput')
                         .setLabel(attraction(interaction.locale).attractionInputLabel)
-                        .setStyle('SHORT');
+                        .setStyle('SHORT')
+                        .setRequired(true);
 
                     const actionRow = new MessageActionRow().addComponents(attractionInput);
                     modal.addComponents(actionRow);
                     await button.showModal(modal);
                     await button.awaitModalSubmit({ filter, time: 30000 }).then(modalSubmitInteraction => {
+                        const row = modalSubmitInteraction.message.components[0];
+                        const button = row.components[0];
+                        button.setDisabled(true);
+                        interaction.editReply({ components: [row] })
                         const value = modalSubmitInteraction.fields.getTextInputValue('attractionInput');
                         // console.log(value + '\n' + attractionObject.att.toLowerCase())
                         if(value.toLowerCase() == attractionObject.att.toLowerCase()) {
@@ -112,7 +130,58 @@ module.exports = new Command({
                 })
             }
         }
-        
+        if(subcommandGroup === 'walibi') {
+            if(subcommand === 'guess-attraction') {
+                const attractions = [
+                    { img: 'https://cdn.discordapp.com/attachments/950681875733708820/979677026174763018/unknown.png', name: 'test' }
+                ].map(obj => { return { img: new MessageAttachment(obj.img, 'eftelingimage.png'), name: obj.name } });
+
+                const attr = attractions[Math.floor(Math.random() * attractions.length)];
+
+                await interaction.reply({
+                    fetchReply: true,
+                    files: [attr.img],
+                    embeds: [
+                        new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale).embedTitle).setImage('attachment://eftelingimage.png')
+                    ],
+                    components: [
+                        new MessageActionRow().addComponents(
+                            new MessageButton()
+                                .setLabel(attraction(interaction.locale).buttonText)
+                                .setCustomId('submit')
+                                .setStyle('SUCCESS')
+                        )
+                    ]
+                });
+
+                const message = await interaction.fetchReply()
+                /**
+                 * @type {ButtonInteraction}
+                 */
+                const buttonInteraction = await (message.partial ? await message.fetch() : message).awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, time: 15000 });
+                const modal = new Modal()
+                    .setCustomId('walibiAttractionGuess')
+                    .setTitle(attraction(interaction.locale).modalTitle);
+
+                const attractionInput = new TextInputComponent()
+                    .setCustomId('attractionInput')
+                    .setLabel(attraction(interaction.locale).attractionInputLabel)
+                    .setStyle('SHORT')
+                    .setRequired(true);
+                modal.addComponents(new MessageActionRow().addComponents(attractionInput));
+                await buttonInteraction.showModal(modal);
+
+                const modalInteraction = await buttonInteraction.awaitModalSubmit({ time: 20000 });
+                const row = modalInteraction.message.components[0];
+                const button = row.components[0];
+                button.setDisabled(true);
+                interaction.editReply({ components: [row] })
+                const input = modalInteraction.fields.getTextInputValue('attractionInput');
+                if(input.toLowerCase() === attr.name.toLowerCase()) return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input).succesEmbedTitle) ], fetchReply: true }).then(async m => await m.react('👍'));
+                else return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input, attr.name).wronEmbedTitle) ] })
+
+            }
+        }
     }
 });
 

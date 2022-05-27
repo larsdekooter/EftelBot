@@ -1,9 +1,10 @@
 const { REST } = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
+require('dotenv').config()
 
 const clientId = '972464152176099372';
-const guildId = '972418027066884116';
+const guildId = process.argv.slice(2)[0] === 'prod' ? '972418027066884116' : '950680035411501056';
 const token  = process.env['token']
 
 const commands = [];
