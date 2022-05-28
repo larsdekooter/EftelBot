@@ -46,7 +46,7 @@ const commandFiles = fs.readdirSync('./Commands').filter(file => file.endsWith('
 for(const file of commandFiles) {
     const command = require(`./Commands/${file}`);
 
-    client.commands.set(command.name, command)
+    client.commands.set(command.data.name, command)
 }
 
 client.on('interactionCreate', async (interaction) => {
@@ -54,7 +54,15 @@ client.on('interactionCreate', async (interaction) => {
         const { commandName } = interaction
         const command = client.commands.get(commandName);
         if(!command) return console.log('STOP');
-        command.execute(interaction, client)
+        try {
+          await command.execute(interaction, client)
+        } catch (error) {
+          console.error(error)
+          return await interaction.reply('Oops.... Something went wrong').catch(e => {
+            if(e.message == 'DiscordAPIError: Interaction has already been acknowledged') return interaction.channel.send('Oops.... Something went wrong!')
+            console.log(e)
+          })
+        }
     }
 })
 
@@ -72,4 +80,5 @@ client.on('interactionCreate', async (interaction) => {
 
 // client.login(token)
 console.log(process.argv.slice(2))
+client.on('rateLimit', console.log)
 process.argv.slice(2)[0] === 'n' ? null : client.login(token)
