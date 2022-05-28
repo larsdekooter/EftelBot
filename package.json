@@ -1,7 +1,7 @@
 {
   "name": "eftelbot",
   "version": "1.0.0",
-  "description": "A Discord Bot for the Themepars_netherlands Discord Server",
+  "description": "A Discord Bot for the Themeparks_netherlands Discord Server!\r # Join the Discord Server\r [click here](https://discord.gg/d8FC3abFMy)\r # Stalk Themeparks_netherlands\r [tiktok](https://www.tiktok.com/@themeparks_netherlands)\r [instagram](https://www.instagram.com/themeparks_netherlands/)\r # Website\r https://eftbot.kooterman.repl.co/",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/larsdekooter/EftelBot.git"
   },
-  "author": "LarsdeKooter",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/larsdekooter/EftelBot/issues"
