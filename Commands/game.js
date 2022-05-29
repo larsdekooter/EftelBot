@@ -39,6 +39,7 @@ module.exports = new Command({
         })
       ,
     async execute(interaction, client) {
+        if(!interaction.inCachedGuild()) return;
         const subcommand = interaction.options.getSubcommand();
         const subcommandGroup = interaction.options.getSubcommandGroup();
         if(subcommandGroup === 'efteling') {
@@ -100,33 +101,44 @@ module.exports = new Command({
                     const actionRow = new MessageActionRow().addComponents(attractionInput);
                     modal.addComponents(actionRow);
                     await button.showModal(modal);
-                    await button.awaitModalSubmit({ filter, time: 30000 }).then(modalSubmitInteraction => {
-                        const row = modalSubmitInteraction.message.components[0];
-                        const button = row.components[0];
-                        button.setDisabled(true);
-                        interaction.editReply({ components: [row] })
-                        const value = modalSubmitInteraction.fields.getTextInputValue('attractionInput');
-                        // console.log(value + '\n' + attractionObject.att.toLowerCase())
-                        if(value.toLowerCase() == attractionObject.att.toLowerCase()) {
-                            modalSubmitInteraction.reply({
-                                embeds: [
-                                    new MessageEmbed().setColor('DARK_GREEN')
-                                        .setTitle(attraction(interaction.locale, attractionObject.att).succesEmbedTitle)
-                                ],
-                                fetchReply: true
-                            }).then(async msg =>{ 
-                                    await msg.react('👍');
+                    try {
+                        await button.awaitModalSubmit({ filter, time: 30000 })
+                        .then(modalSubmitInteraction => {
+                            const row = modalSubmitInteraction.message.components[0];
+                            const button = row.components[0];
+                            button.setDisabled(true);
+                            interaction.editReply({ components: [row] })
+                            const value = modalSubmitInteraction.fields.getTextInputValue('attractionInput');
+                            // console.log(value + '\n' + attractionObject.att.toLowerCase())
+                            if(value.toLowerCase() == attractionObject.att.toLowerCase()) {
+                                modalSubmitInteraction.reply({
+                                    embeds: [
+                                        new MessageEmbed().setColor('DARK_GREEN')
+                                            .setTitle(attraction(interaction.locale, attractionObject.att).succesEmbedTitle)
+                                    ],
+                                    fetchReply: true
+                                }).then(async msg =>{ 
+                                        await msg.react('👍');
                                     
-                            })
-                        } else {
-                            modalSubmitInteraction.reply({
-                                embeds: [
-                                    new MessageEmbed().setColor('DARK_GREEN')
-                                        .setTitle(attraction(interaction.locale, value, attractionObject.att).wronEmbedTitle)
-                                ]
-                            })
-                        }
-                    })
+                                })
+                            } else {
+                                modalSubmitInteraction.reply({
+                                    embeds: [
+                                        new MessageEmbed().setColor('DARK_GREEN')
+                                            .setTitle(attraction(interaction.locale, value, attractionObject.att).wronEmbedTitle)
+                                    ]
+                                })
+                            }
+                        }, async (rejected) => {
+                            interaction.followUp(attraction(interaction.locale).timeError);
+                            console.log('Rejected')
+                        }).catch(e => {
+                            console.log('Caught')
+                            return interaction.followUp(attraction(interaction.locale).timeError)
+                        })
+                    } catch (error) {
+                        // console.error(error)
+                    }
                 })
             }
         }
@@ -175,14 +187,18 @@ module.exports = new Command({
                 modal.addComponents(new MessageActionRow().addComponents(attractionInput));
                 await buttonInteraction.showModal(modal);
 
-                const modalInteraction = await buttonInteraction.awaitModalSubmit({ time: 20000 });
-                const row = modalInteraction.message.components[0];
-                const button = row.components[0];
-                button.setDisabled(true);
-                interaction.editReply({ components: [row] })
-                const input = modalInteraction.fields.getTextInputValue('attractionInput');
-                if(input.toLowerCase() === attr.name.toLowerCase()) return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input).succesEmbedTitle) ], fetchReply: true }).then(async m => await m.react('👍'));
-                else return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input, attr.name).wronEmbedTitle) ] })
+                try {
+                    const modalInteraction = await buttonInteraction.awaitModalSubmit({ time: 30000 });
+                    const row = modalInteraction.message.components[0];
+                    const button = row.components[0];
+                    button.setDisabled(true);
+                    interaction.editReply({ components: [row] })
+                    const input = modalInteraction.fields.getTextInputValue('attractionInput');
+                    if(input.toLowerCase() === attr.name.toLowerCase()) return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input).succesEmbedTitle) ], fetchReply: true }).then(async m => await m.react('👍'));
+                    else return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input, attr.name).wronEmbedTitle) ] })
+                } catch(error) {
+                    await interaction.followUp(attraction(interaction.locale).timeError)
+                }
 
             }
         }
@@ -196,6 +212,7 @@ function attraction(locale, extraText, rightInfo) {
         attractionInputLabel: locale === 'nl' ? 'Attractie' : 'Attraction',
         succesEmbedTitle: locale === 'nl' ? `Dat is inderdaad ${extraText}` : `That is indeed ${extraText}`,
         wronEmbedTitle: locale === 'nl' ? `${extraText} is helaas niet het goede antwoord. Het juiste antwoord was ${rightInfo}` : `${extraText} is onfortunatly not the right answer. The right answer was ${rightInfo}`,
-        buttonText: locale === 'nl' ? 'Klik op mij om je antwoord in te voeren' : 'Press me to enter your answer'
+        buttonText: locale === 'nl' ? 'Klik op mij om je antwoord in te voeren' : 'Press me to enter your answer',
+        timeError: locale === 'nl' ? 'Tijd is op!' : 'You ran out of time!'
     }
 }
