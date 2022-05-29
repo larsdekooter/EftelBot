@@ -57,11 +57,10 @@ client.on('interactionCreate', async (interaction) => {
         try {
           await command.execute(interaction, client)
         } catch (error) {
+          if(interaction.deferred || interaction.replied) return interaction.channel.send('Oops... Something went wrong!');
           console.error(error)
-          return await interaction.reply('Oops.... Something went wrong').catch(e => {
-            if(e.message == 'DiscordAPIError: Interaction has already been acknowledged') return interaction.channel.send('Oops.... Something went wrong!')
-            console.log(e)
-          })
+          
+          return await interaction.reply('Oops.... Something went wrong')
         }
     }
 })
