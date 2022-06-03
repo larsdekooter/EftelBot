@@ -1,5 +1,6 @@
 const { Message, Client, CommandInteraction } = require("discord.js");
-const { SlashCommandBuilder } = require('@discordjs/builders')
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const MyClient = require("./Client");
 
 /**
  * 
@@ -11,7 +12,7 @@ function RunFunction(message, args, client) {};
 /**
  * 
  * @param {CommandInteraction} interaction 
- * @param {Client} client 
+ * @param {MyClient} client 
  */
 function RunInteraction(interaction, client) {};
 

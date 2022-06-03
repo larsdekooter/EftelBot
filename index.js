@@ -1,6 +1,7 @@
 console.clear()
 // Import everything we use
 const { Client, Intents, Collection } = require('discord.js');
+
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10')
 const { FLAGS } = Intents;
@@ -8,6 +9,7 @@ const fs = require('node:fs');
 require('dotenv').config();
 // Setup our website
 const express = require('express');
+const MyClient = require('./Structures/Client');
 const app = express();
 app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
 app.get('/botcommands.html', (req, res) => res.sendFile('botcommands.html', { root: '.' }));
@@ -22,25 +24,26 @@ app.listen(8080)
 
 const token = process.env['token'];
 
-const client = new Client({
+const client = new MyClient({
     intents: [
         FLAGS.GUILDS,
         // FLAGS.GUILD_MESSAGES,
         // FLAGS.GUILD_SCHEDULED_EVENTS,
-    ],
-  presence: {
-    activities: [{ name: 'De wacht op de opening van de Pagode', type: 'WATCHING' }]
+      ],
+      presence: {
+        activities: [{ name: 'De wacht op de opening van de Pagode', type: 'WATCHING' }]
+        
+      }
+    });
     
-  }
-});
-
-client.on('ready', async () => {
-    console.log(`${client.user.tag} is online`)
-     
-});
-
-client.on('debug', console.log)
-
+    client.on('ready', async () => {
+      console.log(`${client.user.tag} is online`);
+      // client.translate('en')
+    
+  });
+  
+  client.on('debug', console.log)
+  
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./Commands').filter(file => file.endsWith('.js'));
 for(const file of commandFiles) {
@@ -57,10 +60,10 @@ client.on('interactionCreate', async (interaction) => {
         try {
           await command.execute(interaction, client)
         } catch (error) {
-          if(interaction.deferred || interaction.replied) return interaction.channel.send('Oops... Something went wrong!');
+          if(interaction.deferred || interaction.replied) return interaction.channel.send('Oops... Something went wrong! (code: ALREADY_REPLIED)');
           console.error(error)
           
-          return await interaction.reply('Oops.... Something went wrong')
+          return await interaction.reply('Oops.... Something went wrong! (code: UNKNOWN)')
         }
     }
 })
@@ -79,5 +82,7 @@ client.on('interactionCreate', async (interaction) => {
 
 // client.login(token)
 console.log(process.argv.slice(2))
-client.on('rateLimit', console.log)
+client.on('rateLimit', console.log);
+
+
 process.argv.slice(2)[0] === 'n' ? null : client.login(token)

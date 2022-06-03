@@ -69,13 +69,13 @@ module.exports = new Command({
                 const message = await interaction.reply({ 
                     files: [attractionObject.image],
                     embeds: [
-                        new MessageEmbed().setColor('DARK_GREEN').setTitle(attraction(interaction.locale).embedTitle).setImage('attachment://eftelingimage.png')
+                        new MessageEmbed().setColor('DARK_GREEN').setTitle(client.translate(interaction.locale).attractionEmbedTitle).setImage('attachment://eftelingimage.png')
                     ],
                     components: [
                         new MessageActionRow().addComponents(
                             new MessageButton()
                                 .setCustomId('showModal')
-                                .setLabel(attraction(interaction.locale).buttonText)
+                                .setLabel(client.translate(interaction.locale).attractionButtonText)
                                 .setStyle('SUCCESS')
                         )
                     ],
@@ -90,11 +90,11 @@ module.exports = new Command({
                     collector.stop()
                     const modal = new Modal()
                         .setCustomId('eftelingAttractionGuess')
-                        .setTitle(attraction(interaction.locale).modalTitle);
+                        .setTitle(client.translate(interaction.locale).attractionModalTitle);
 
                     const attractionInput = new TextInputComponent()
                         .setCustomId('attractionInput')
-                        .setLabel(attraction(interaction.locale).attractionInputLabel)
+                        .setLabel(client.translate(interaction.locale).attractionInputLabel)
                         .setStyle('SHORT')
                         .setRequired(true);
 
@@ -114,7 +114,7 @@ module.exports = new Command({
                                 modalSubmitInteraction.reply({
                                     embeds: [
                                         new MessageEmbed().setColor('DARK_GREEN')
-                                            .setTitle(attraction(interaction.locale, attractionObject.att).succesEmbedTitle)
+                                            .setTitle(client.translate(interaction.locale, attractionObject.att).attractionSuccessEmbedTitle)
                                     ],
                                     fetchReply: true
                                 }).then(async msg =>{ 
@@ -125,16 +125,17 @@ module.exports = new Command({
                                 modalSubmitInteraction.reply({
                                     embeds: [
                                         new MessageEmbed().setColor('DARK_GREEN')
-                                            .setTitle(attraction(interaction.locale, value, attractionObject.att).wronEmbedTitle)
+                                            .setTitle(client.translate(interaction.locale, value, attractionObject.att).attractionWrongEmbedTitle)
                                     ]
                                 })
                             }
                         }, async (rejected) => {
-                            interaction.followUp(attraction(interaction.locale).timeError);
+                            interaction.followUp(client.translate(interaction.locale).timeUp);
                             console.log('Rejected')
                         }).catch(e => {
                             console.log('Caught')
-                            return interaction.followUp(attraction(interaction.locale).timeError)
+                            // console.error(e)
+                            return interaction.followUp(client.translate(interaction.locale).timeUp)
                         })
                     } catch (error) {
                         // console.error(error)
@@ -158,12 +159,12 @@ module.exports = new Command({
                     fetchReply: true,
                     files: [attr.img],
                     embeds: [
-                        new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale).embedTitle).setImage('attachment://eftelingimage.png')
+                        new MessageEmbed().setColor('RED').setTitle(client.translate(interaction.locale).attractionEmbedTitle).setImage('attachment://eftelingimage.png')
                     ],
                     components: [
                         new MessageActionRow().addComponents(
                             new MessageButton()
-                                .setLabel(attraction(interaction.locale).buttonText)
+                                .setLabel(client.translate(interaction.locale).attractionButtonText)
                                 .setCustomId('submit')
                                 .setStyle('SUCCESS')
                         )
@@ -177,11 +178,11 @@ module.exports = new Command({
                 const buttonInteraction = await (message.partial ? await message.fetch() : message).awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, time: 15000 });
                 const modal = new Modal()
                     .setCustomId('walibiAttractionGuess')
-                    .setTitle(attraction(interaction.locale).modalTitle);
+                    .setTitle(client.translate(interaction.locale).attractionModalTitle);
 
                 const attractionInput = new TextInputComponent()
                     .setCustomId('attractionInput')
-                    .setLabel(attraction(interaction.locale).attractionInputLabel)
+                    .setLabel(client.translate(interaction.locale).attractionInputLabel)
                     .setStyle('SHORT')
                     .setRequired(true);
                 modal.addComponents(new MessageActionRow().addComponents(attractionInput));
@@ -194,10 +195,10 @@ module.exports = new Command({
                     button.setDisabled(true);
                     interaction.editReply({ components: [row] })
                     const input = modalInteraction.fields.getTextInputValue('attractionInput');
-                    if(input.toLowerCase() === attr.name.toLowerCase()) return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input).succesEmbedTitle) ], fetchReply: true }).then(async m => await m.react('👍'));
-                    else return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(attraction(interaction.locale, input, attr.name).wronEmbedTitle) ] })
+                    if(input.toLowerCase() === attr.name.toLowerCase()) return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(client.translate(interaction.locale, input).attractionSuccesEmbedTitle) ], fetchReply: true }).then(async m => await m.react('👍'));
+                    else return await modalInteraction.reply({ embeds: [ new MessageEmbed().setColor('RED').setTitle(client.translate(interaction.locale, input, attr.name).attractionWrongEmbedTitle) ] })
                 } catch(error) {
-                    await interaction.followUp(attraction(interaction.locale).timeError)
+                    await interaction.followUp(client.translate(interaction.locale).timeUp)
                 }
 
             }
