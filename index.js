@@ -22,28 +22,35 @@ app.get('/themeparks', async (req, res) => {
 app.use(express.static('public'));
 app.listen(8080)
 
+
+// Get the token to login with from the .env file
 const token = process.env['token'];
 
+// Create the client, MyClient just has an extra method attached to it and extend the Client from discord.js
+
 const client = new MyClient({
+  // The intents for the events
     intents: [
         FLAGS.GUILDS,
-        // FLAGS.GUILD_MESSAGES,
-        // FLAGS.GUILD_SCHEDULED_EVENTS,
       ],
+
+      // Set the presence of the bot
       presence: {
         activities: [{ name: 'De wacht op de opening van de Pagode', type: 'WATCHING' }]
         
       }
     });
     
-    client.on('ready', async () => {
-      console.log(`${client.user.tag} is online`);
-      // client.translate('en')
-    
-  });
+
+    // Once the client is logged in and recieved everything it needs, log to the console that the bot is online
+client.on('ready', async () => {
+  console.log(`${client.user.tag} is online`);    
+});
+
+// Log info to the console, important because if the bot is ratelimited the console will show it
+client.on('debug', console.log)
   
-  client.on('debug', console.log)
-  
+// Put all the commands a Collection, needed for the Command Handler
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./Commands').filter(file => file.endsWith('.js'));
 for(const file of commandFiles) {
@@ -52,37 +59,33 @@ for(const file of commandFiles) {
     client.commands.set(command.data.name, command)
 }
 
+// Once we recieve an interaction, the command will be found and ran
 client.on('interactionCreate', async (interaction) => {
-    if(interaction.isCommand()) {
-        const { commandName } = interaction
-        const command = client.commands.get(commandName);
-        if(!command) return console.log('STOP');
-        try {
-          await command.execute(interaction, client)
-        } catch (error) {
-          if(interaction.deferred || interaction.replied) return interaction.channel.send('Oops... Something went wrong! (code: ALREADY_REPLIED)');
-          console.error(error)
-          
-          return await interaction.reply('Oops.... Something went wrong! (code: UNKNOWN)')
-        }
+  // Check if interaction is a command, and not any other interaction such as a button
+  if(interaction.isCommand()) {
+    const { commandName } = interaction;
+    // Get the command from the Collection
+    const command = client.commands.get(commandName);
+    // If no command is found, stop the interaction
+    if(!command) return console.log('STOP');
+    try {
+      // Try to execute the command
+      await command.execute(interaction, client);
+    } catch (error) {
+      // Log the error to the console
+      console.error(error)      
+      // If there is an error and the interaction is already acknowledged, send a message to the channel. If the bot doesnt have any SEND_MESSAGES and VIEW_CHANNEL permission in
+      // that channel, catch the MISSIN_PERMISSIONS error
+      if(interaction.deferred || interaction.replied) return interaction.channel.send('Oops... Something went wrong! (code: ALREADY_REPLIED)').catch(e => {});
+      // Reply to the interaction that something went wrong
+      return await interaction.reply('Oops.... Something went wrong! (code: UNKNOWN)')
     }
+  }
 })
 
 
-
-  setInterval(async() => {
-    const rest = new REST({ version: '10' }).setToken(token);
-  await rest.post(Routes.channelMessages('979437918651306015'), {
-    body: {
-      content: 'Bot Online'
-    }
-  })
-  }, 43200000)
-
-
-// client.login(token)
-console.log(process.argv.slice(2))
+// If the bot hits a ratelimit, it will be logged to the console
 client.on('rateLimit', console.log);
 
-
+// If the second argument in the console is 'n', dont login and only run the site. If it isnt 'n', login
 process.argv.slice(2)[0] === 'n' ? null : client.login(token)
