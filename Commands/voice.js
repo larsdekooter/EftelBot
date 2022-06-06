@@ -1,6 +1,6 @@
 const Command  = require('../Structures/Command');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus} = require('@discordjs/voice');
 const { createReadStream } = require('fs');
 const { join } = require('path');
 
@@ -38,5 +38,8 @@ module.exports = new Command({
         const player = createAudioPlayer();
         player.play(resource);
         connection.subscribe(player)
+
+
+        player.on(AudioPlayerStatus.Idle, () => connection.destroy())
     }
 })
