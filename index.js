@@ -32,6 +32,7 @@ const client = new MyClient({
   // The intents for the events
     intents: [
         FLAGS.GUILDS,
+        FLAGS.GUILD_VOICE_STATES
       ],
 
       // Set the presence of the bot
